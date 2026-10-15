@@ -1,0 +1,38 @@
+  html, body { margin: 0; height: 100%; background: #140c1c; overflow: hidden; }
+  body {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-sizing: border-box;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    touch-action: manipulation; -webkit-user-select: none; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body.below { flex-direction: column; }          /* portrait: toolbar under the picture */
+  body.side { flex-direction: row; }              /* wide screens: toolbar beside it */
+  canvas {
+    display: block;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    touch-action: manipulation;
+  }
+  #bar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  body.side #bar { flex-direction: column; flex-wrap: nowrap; }
+  body.overlay #bar {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(6px + env(safe-area-inset-bottom)); flex-wrap: nowrap;
+  }
+  body.overlay #bar button { opacity: 0.85; }
+  #bar button {
+    width: 48px; height: 48px; padding: 0; margin: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    background: #1b1f3b; color: #f4f4ec; border: 2px solid #4a4f84; border-radius: 0;
+    font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.5px;
+    cursor: pointer; touch-action: manipulation;
+  }
+  #bar button:hover { border-color: #6aaee0; }
+  #bar button:active { background: #2c2f5e; }
+  #bar button:focus-visible { outline: 2px solid #ffd65c; outline-offset: 1px; }
+  #bar button.on { color: #ffd65c; border-color: #ffd65c; }
+  #bar button.big { font-size: 15px; }
+  #bar svg { width: 20px; height: 20px; shape-rendering: crispEdges; fill: currentColor; }
+  #bar button > * { pointer-events: none; }       /* taps always land on the button itself */
+  #bar button[hidden] { display: none; }          /* AUTO and DRIVE show different controls */

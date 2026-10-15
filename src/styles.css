@@ -1,0 +1,159 @@
+/* Global page + layout. Ported from the original css/styles.css: the body
+   flexbox moved onto the .app container so React owns the DOM. */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #140c1c;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: 100%;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app.below {
+  flex-direction: column; /* portrait: toolbar under the picture */
+}
+
+.app.side {
+  flex-direction: row; /* wide screens: toolbar beside it */
+}
+
+canvas {
+  display: block;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  touch-action: manipulation;
+}
+
+.bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.app.side .bar {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.app.overlay .bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(6px + env(safe-area-inset-bottom));
+  flex-wrap: nowrap;
+}
+
+.app.overlay .bar button {
+  opacity: 0.85;
+}
+
+.bar button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: #1b1f3b;
+  color: #f4f4ec;
+  border: 2px solid #4a4f84;
+  border-radius: 0;
+  font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bar button:hover {
+  border-color: #6aaee0;
+}
+
+.bar button:active {
+  background: #2c2f5e;
+}
+
+.bar button:focus-visible {
+  outline: 2px solid #ffd65c;
+  outline-offset: 1px;
+}
+
+.bar button.on {
+  color: #ffd65c;
+  border-color: #ffd65c;
+}
+
+.bar button.big {
+  font-size: 15px;
+}
+
+.bar svg {
+  width: 20px;
+  height: 20px;
+  shape-rendering: crispEdges;
+  fill: currentColor;
+}
+
+.bar button > * {
+  pointer-events: none; /* taps always land on the button itself */
+}
+
+/* Route picker — layered over the title card, top-right, out of the flex flow
+   so showing/hiding it never shifts the picture or toolbar. */
+.routebar {
+  position: fixed;
+  top: calc(8px + env(safe-area-inset-top));
+  right: calc(8px + env(safe-area-inset-right));
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background: #1b1f3b;
+  border: 2px solid #4a4f84;
+  font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+  color: #f4f4ec;
+  max-width: calc(100vw - 24px);
+}
+
+.routebar-label {
+  color: #8f96c8;
+}
+
+.routebar-select {
+  background: #12152c;
+  color: #f4f4ec;
+  border: 2px solid #4a4f84;
+  border-radius: 0;
+  padding: 3px 4px;
+  font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+  max-width: 40vw;
+}
+
+.routebar-select:focus-visible {
+  outline: 2px solid #ffd65c;
+  outline-offset: 1px;
+}

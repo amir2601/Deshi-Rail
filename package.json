@@ -1,0 +1,25 @@
+{
+  "name": "deshi-rail",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Deshi Rail — a pixel-art, real-time simulation of intercity train journeys across Bangladesh. React + Vite edition.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:engine": "node scripts/build-engine.mjs",
+    "screenshot": "node scripts/screenshot.mjs --scene tea --time day --out docs/hero.png",
+    "screenshots": "node scripts/screenshot.mjs --scene tea --out docs/hero.png && node scripts/screenshot.mjs --scene hills --out docs/hills.png && node scripts/screenshot.mjs --scene kash --out docs/kash.png",
+    "test": "node scripts/smoke-test.mjs && node scripts/route-test.mjs && node scripts/lines-test.mjs && node scripts/react-ssr-test.mjs",
+    "check": "npm test && node scripts/dev-check.mjs"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.4"
+  }
+}

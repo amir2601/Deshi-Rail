@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#140c1c">
+<title>Deshi Rail</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<canvas id="screen" width="320" height="180"></canvas>
+<div id="bar" role="toolbar" aria-label="Train controls">
+  <button id="b-mode" type="button" aria-label="Driver mode" title="Drive the train yourself (C)"><svg viewBox="0 0 16 16"><path d="M5 2h6v1h2v2h1v6h-1v2h-2v1H5v-1H3v-2H2V5h1V3h2zM6 4H5v1H4v6h1v1h6v-1h1V5h-1V4zM7 4h2v3H7zM7 7h2v2H7zM4 7h3v1H4zM9 7h3v1H9zM7 9h2v3H7z"/></svg><span>AUTO</span></button>
+  <button id="b-engine" type="button" class="drv" hidden aria-label="Start the engine" title="Engine start / stop (E)"><svg viewBox="0 0 16 16"><path d="M7 1h2v7H7zM4 3h2v2H4zM10 3h2v2h-2zM2 5h2v6H2zM12 5h2v6h-2zM3 11h2v2H3zM11 11h2v2h-2zM5 13h6v1H5z"/></svg><span>START</span></button>
+  <button id="b-rev" type="button" class="drv" hidden aria-label="Reverser" title="Reverse / Forward (R)"><svg viewBox="0 0 16 16"><path d="M5 2L2 5l3 3V6h6V4H5V2zM11 14l3-3-3-3v2H5v2h6v2z"/></svg><span>FWD</span></button>
+  <button id="b-power" type="button" class="drv" hidden aria-label="Power: notch up" title="Power up / release brake (Up arrow)"><svg viewBox="0 0 16 16"><path d="M7 3h2v1h1v1h1v1h1v1h1v1h1v2H2V8h1V7h1V6h1V5h1V4h1z"/></svg><span>POWER</span></button>
+  <button id="b-brake" type="button" class="drv" hidden aria-label="Brake: notch down" title="Power down / brake (Down arrow, B = emergency)"><svg viewBox="0 0 16 16"><path d="M2 5h12v2h-1v1h-1v1h-1v1h-1v1H9v1H7v-1H6v-1H5V9H4V8H3V7H2z"/></svg><span>BRAKE</span></button>
+  <button id="b-doors" type="button" class="drv" hidden aria-label="Open the doors" title="Doors (O)"><svg viewBox="0 0 16 16"><path d="M2 2h12v12H2zM4 4v10h3V4zM9 4v10h3V4z"/></svg><span>OPEN</span></button>
+  <button id="b-horn" type="button" class="drv" hidden aria-label="Horn" title="Horn (hold H)"><svg viewBox="0 0 16 16"><path d="M1 7h3v2H1zM4 6h2v4H4zM6 5h2v6H6zM8 3h2v10H8zM12 4h1v1h-1zM13 7h2v2h-2zM12 11h1v1h-1z"/></svg><span>HORN</span></button>
+  <button id="b-light" type="button" class="drv" hidden aria-label="Headlight" title="Headlight (L)"><svg viewBox="0 0 16 16"><path d="M6 2h4v1h1v1h1v4h-1v1h-1v2H6V9H5V8H4V4h1V3h1zM6 12h4v1H6zM7 14h2v1H7z"/></svg><span>LIGHT</span></button>
+  <button id="b-pause" type="button" aria-label="Pause" title="Pause (P)"><svg viewBox="0 0 16 16"></svg><span>PAUSE</span></button>
+  <button id="b-speed" type="button" class="big aut" aria-label="Speed 1x" title="Speed (1 / 2 / 4)">1x</button>
+  <button id="b-skip" type="button" class="aut" aria-label="Skip to next station" title="Next station (N)"><svg viewBox="0 0 16 16"><path d="M3 3h2v1h2v1h2v1h1v1h1v2h-1v1h-1v1H7v1H5v1H3zM12 3h2v10h-2z"/></svg><span>NEXT</span></button>
+  <button id="b-time" type="button" class="aut" aria-label="Time of day" title="Time of day (T)"><svg viewBox="0 0 16 16"></svg><span>AUTO</span></button>
+  <button id="b-rain" type="button" class="aut" aria-label="Rain" title="Rain (W)"><svg viewBox="0 0 16 16"><path d="M5 2h5v1h2v1h1v2h1v3H1V6h1V4h1V3h2zM3 11h1v2H3zM7 11h1v2H7zM11 11h1v2h-1zM5 13h1v2H5zM9 13h1v2H9z"/></svg><span>AUTO</span></button>
+  <button id="b-mute" type="button" aria-label="Sound" title="Sound (M)"><svg viewBox="0 0 16 16"></svg><span>TAP</span></button>
+</div>
+  <script src="js/01-config.js"></script>
+  <script src="js/02-palette.js"></script>
+  <script src="js/03-drawing.js"></script>
+  <script src="js/04-train.js"></script>
+  <script src="js/05-world.js"></script>
+  <script src="js/06-terrain.js"></script>
+  <script src="js/07-stations.js"></script>
+  <script src="js/08-people.js"></script>
+  <script src="js/09-journey.js"></script>
+  <script src="js/10-drive-mode.js"></script>
+  <script src="js/11-atmosphere.js"></script>
+  <script src="js/12-ui-audio-input.js"></script>
+  <script src="js/13-main.js"></script>
+</body>
+</html>
