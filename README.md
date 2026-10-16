@@ -33,8 +33,7 @@ boats on the river, a rickshaw at the level crossing, a station crowd waiting to
 board — and the light slides from noon into a dusk of lit windows and headlight
 glow.
 
-Underneath, it is a faithful reproduction of
-[pixel-train-journey](https://pixel-train-journey.vercel.app/), rebuilt as an
+Underneath, it is a faithful reproduction of pixel-train-journey, rebuilt as an
 idiomatic **React + Vite** app and re-fitted with the **real** routes, stations
 and services of Bangladesh Railway. The simulation, drawing and audio code is
 the original engine, carried over almost unchanged; what was adapted is the
