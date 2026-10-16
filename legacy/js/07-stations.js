@@ -30,6 +30,7 @@ for (let i = 0; i < ROUTE.length; i++) {
 const STATIONS = ROUTE.map((r, index) => {
   const st = { ...STATION_DEFAULTS, ...r, index };
   st.bnMask = textMask(st.bn, CONFIG.BN_SIZE);
+  st.bnBoardMask = textMask(st.bn, CONFIG.BOARD_BN_SIZE);   // the platform sign
   st.layout = layoutStation(st);
   return st;
 });
@@ -246,7 +247,7 @@ function buildTinRoof(p, w, color) {
 
 // Yellow name board on two posts: Bangla above English
 function buildBoard(p, st) {
-  const m = st.bnMask, ew = textWidth(st.en);
+  const m = st.bnBoardMask, ew = textWidth(st.en);
   const bw = Math.max(m.w, ew) + 8, bh = m.h + 13, h = 160 - BOARD_TOP;
   const [c, g] = makeCanvas(bw, h);
   for (const x of [3, bw - 5]) { rect(g, x, bh, 2, h - bh, p.grayDark); rect(g, x, bh, 1, h - bh, p.gray); }

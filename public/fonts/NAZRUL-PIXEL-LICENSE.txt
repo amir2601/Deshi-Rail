@@ -1,0 +1,31 @@
+নজরুল পিক্সেল — Nazrul Pixel
+================================
+
+Source: https://fontbd.com/free-font/nazrul-pixel/
+File:   NazrulPixelUnicode-Regular.ttf  (Unicode build)
+        sha256 8ac704cbda14224991252478b5b978efddfd83c75af08b8bb42fde0f34abd8ca
+
+Designed by  Md Nazrul Islam
+Developed by Samsur Rahman
+Distributed by FontBD (fontbd.com)
+
+Personal-use note
+-----------------
+This copy is bundled so the game's Bangla text can be rasterised offline at
+runtime. FontBD's End User License Agreement permits use "in all kinds of
+personal or commercial design projects", but it does NOT permit
+redistributing or re-uploading the font file itself:
+
+  "You cannot distribute, sell, upload/re-upload, or share any fonts
+   downloaded or purchased from Fontbd, under any condition, on any other
+   website, social media platform, or any other medium."
+   — https://fontbd.com/eula/
+
+So this project is fine to run and share privately, but the font file must
+NOT be shipped in a publicly hosted or publicly distributed build. If you
+ever publish the game, either obtain an extended license from FontBD or
+switch the Bengali face to an OFL-licensed pixel font (e.g. Pixelborno,
+https://github.com/wasi-master/pixelborno) — the engine only needs the family
+name in BN_FONT changed.
+
+EULA copy: https://fontbd.com/eula/

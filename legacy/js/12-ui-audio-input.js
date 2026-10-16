@@ -40,7 +40,10 @@ function bannerSprite(i) {
   if (bannerCache[i]) return bannerCache[i];
   const st = STATIONS[i], m = st.bnMask, label = 'NEXT STATION:';
   const lw = textWidth(label), ew = textWidth(st.en), h = Math.max(m.h, 5) + 8;
-  const w = 6 + lw + 6 + m.w + 5 + 3 + 5 + ew + 6;
+  // A long name plus its English could still push the banner past the screen,
+  // so drop the "/ <english>" tail rather than clip it.
+  const full = 6 + lw + 6 + m.w + 5 + 3 + 5 + ew + 6, tail = full <= W - 4;
+  const w = tail ? full : 6 + lw + 6 + m.w + 6;
   const [c, g] = makeCanvas(w, h);
   rect(g, 0, 0, w, h, PALETTE.slate);
   rect(g, 1, 1, w - 2, h - 2, PALETTE.ink);
@@ -48,9 +51,12 @@ function bannerSprite(i) {
   const ty = (h - 5) >> 1;
   let x = 6;
   drawText(g, label, x, ty, PALETTE.grayLight);  x += lw + 6;
-  drawMask(g, m, x, (h - m.h) >> 1, PALETTE.glow); x += m.w + 5;
-  drawText(g, '/', x, ty, PALETTE.slate);          x += 8;
-  drawText(g, st.en, x, ty, PALETTE.white);
+  drawMask(g, m, x, (h - m.h) >> 1, PALETTE.glow);
+  if (tail) {
+    x += m.w + 5;
+    drawText(g, '/', x, ty, PALETTE.slate);          x += 8;
+    drawText(g, st.en, x, ty, PALETTE.white);
+  }
   return (bannerCache[i] = c);
 }
 
@@ -136,6 +142,9 @@ function buttonHit(x, y) {
 // the built-in line in 01-config's LINE_INFO.
 const TITLE = { w: 208, h: 112, y: 34, bn: textMask(OPT.bnName || LINE_INFO.bnName, CONFIG.BN_SIZE), sprite: null, best: readBest() };
 TITLE.w = Math.max(TITLE.w, TITLE.bn.w + 24);              // a long route name widens the card
+// The 20px Bangla route name is tall, so the service row (train picker + times)
+// sits a few rows under it instead of at a fixed y — otherwise they collide.
+TITLE.serviceY = 23 + TITLE.bn.h + 7;
 const TITLE_OPTS = [['WATCH', 'SIT BACK AND ENJOY'], ['DRIVE', 'YOU ARE THE DRIVER']];
 const TITLE_HITS = TITLE_OPTS.map(() => ({ x: 0, y: 0, w: 80, h: 15 }));
 
@@ -159,7 +168,7 @@ function buildTitle() {
 // The service picker: click [ or ] (or anywhere on the row) to cycle trains
 function titleTrainHit(x, y) {
   const x0 = (W - TITLE.w) >> 1, y0 = TITLE.y;
-  if (y < y0 + 42 || y > y0 + 58 || x < x0 + 6 || x > x0 + TITLE.w - 6) return 0;
+  if (y < y0 + TITLE.serviceY - 2 || y > y0 + TITLE.serviceY + 14 || x < x0 + 6 || x > x0 + TITLE.w - 6) return 0;
   return x < x0 + 28 ? -1 : 1;
 }
 function selectTrain(k) {
@@ -174,12 +183,13 @@ function drawTitle(g) {
   g.drawImage(TITLE.sprite || (TITLE.sprite = buildTitle()), x0, y0);
   const tr = TRAINS[ui.train];
   const name = tr.no + '  ' + tr.en;
-  drawText(g, '[', x0 + 10, y0 + 44, P.glow);
-  drawText(g, ']', x0 + TITLE.w - 14, y0 + 44, P.glow);
-  drawText(g, name, x0 + ((TITLE.w - textWidth(name)) >> 1), y0 + 44, P.white);
+  const sy = y0 + TITLE.serviceY;
+  drawText(g, '[', x0 + 10, sy, P.glow);
+  drawText(g, ']', x0 + TITLE.w - 14, sy, P.glow);
+  drawText(g, name, x0 + ((TITLE.w - textWidth(name)) >> 1), sy, P.white);
   const when = (tr.all ? STATIONS.length : tr.stops.length + 2) + ' STOPS   DEP ' + hhmm(tr.start) +
                '   ARR ' + hhmm(tr.end) + (tr.end >= 24 ? ' +1' : '');
-  drawText(g, when, x0 + ((TITLE.w - textWidth(when)) >> 1), y0 + 52, P.grayLight);
+  drawText(g, when, x0 + ((TITLE.w - textWidth(when)) >> 1), sy + 8, P.grayLight);
   for (let i = 0; i < TITLE_OPTS.length; i++) {
     const [label, sub] = TITLE_OPTS[i], r = TITLE_HITS[i], sel = ui.titleSel === i;
     r.x = x0 + 16 + i * 96; r.y = y0 + 62;

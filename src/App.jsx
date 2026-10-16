@@ -28,11 +28,30 @@ export default function App() {
 
   // Boot the engine on the chosen line; re-create it when the line changes and
   // tear it down on unmount. The canvas element is reused throughout.
+  //
+  // The engine rasterises every Bangla string to a 1-bit mask as it boots, so
+  // Nazrul Pixel must be loaded before createEngine() runs — otherwise the
+  // masks bake in whatever system Bengali font the browser falls back to.
+  // The size mirrors CONFIG.BN_SIZE (14) so the face is warmed at its real size.
   useEffect(() => {
-    const api = createEngine(canvasRef.current, line || undefined);
-    setEngine(api);
-    setBuiltIn(prev => prev || api.DEFAULT_LINE);
-    return () => api.dispose();
+    let cancelled = false;
+    let api = null;
+    const boot = async () => {
+      try {
+        await document.fonts.load('14px "Nazrul Pixel"');
+      } catch {
+        /* no Font Loading API, or offline: BN_FONT falls back to system faces */
+      }
+      if (cancelled) return;
+      api = createEngine(canvasRef.current, line || undefined);
+      setEngine(api);
+      setBuiltIn(prev => prev || api.DEFAULT_LINE);
+    };
+    boot();
+    return () => {
+      cancelled = true;
+      if (api) api.dispose();
+    };
   }, [line]);
 
   useEngineStore(engine); // re-render when engine state changes

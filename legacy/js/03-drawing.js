@@ -144,11 +144,14 @@ function drawText2x(g, str, x, y, col) {
     if (str[i] !== ' ') g.drawImage(glyph(str[i], col), x + i * 8, y, 6, 10);
 }
 
-// Bangla: rasterise with a Bengali-capable system font, then threshold
+// Bangla: rasterise with a Bengali-capable pixel font, then threshold
 // the alpha to a hard 1-bit mask. The mask is painted in palette colours,
 // so the text stays crisp and never introduces off-palette pixels.
-const BN_FONT = '"Nirmala UI", Vrinda, "Shonar Bangla", "Kohinoor Bangla", ' +
-                '"Bangla Sangam MN", "Noto Sans Bengali", sans-serif';
+// Nazrul Pixel (bundled; personal-use only, see public/fonts/) is a real
+// Bengali pixel font — conjuncts, vowel signs and reph intact. The system
+// faces after it are the offline fallback for a browser without it.
+const BN_FONT = '"Nazrul Pixel", "Nirmala UI", Vrinda, "Shonar Bangla", ' +
+                '"Kohinoor Bangla", "Bangla Sangam MN", "Noto Sans Bengali", sans-serif';
 
 function textMask(str, size) {
   const [c, g] = makeCanvas(Math.ceil(size * str.length * 1.4) + 8, size * 3);

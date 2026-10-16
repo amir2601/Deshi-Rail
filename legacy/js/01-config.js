@@ -52,7 +52,14 @@ const CONFIG = {
   TRAIN_FRONT_X: 273,                   // screen x of the headlight
   LOCO_W: 46, CAR_W: 39, CAR_GAP: 2, CAR_COUNT: 5,
   WHEEL_R: 3.5, WHEEL_FRAMES: 6,
-  BN_SIZE: 11,                          // px size Bangla text is rasterised at
+  BN_SIZE: 14,                          // px size Bangla text is rasterised at.
+                                        // Below ~13px the conjunct counters close
+                                        // up (ক্ষ, ন্ট, ব্ধ), so 14 is the smallest
+                                        // size that still reads as clean pixels.
+  BOARD_BN_SIZE: 10,                    // the platform name board is a sign in the
+                                        // middle distance, so its Bangla is set
+                                        // smaller than the banner's — 10px still
+                                        // reads and keeps the board from looming
 
   // particle pools [normal, low quality]; nothing is allocated while running
   SMOKE_MAX: [70, 40], RAIN_MAX: [180, 100], SPLASH_MAX: [60, 30],

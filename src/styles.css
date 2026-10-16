@@ -1,5 +1,22 @@
 /* Global page + layout. Ported from the original css/styles.css: the body
    flexbox moved onto the .app container so React owns the DOM. */
+
+/* Nazrul Pixel — the Bengali pixel font the engine rasterises station boards,
+   the next-station banner and the title card with. A real pixel face (মাত্রালতা
+   and conjuncts intact), rasterised at 14px (CONFIG.BN_SIZE) to keep the Bangla
+   compact on the 320x180 canvas — the smallest size whose conjuncts still read. Bundled locally, so the game needs no network.
+
+   NOTE — personal use only. FontBD's EULA forbids redistributing the font file
+   itself, so this must not ship in a public build. See
+   public/fonts/NAZRUL-PIXEL-LICENSE.txt for the terms and the OFL alternative. */
+@font-face {
+  font-family: "Nazrul Pixel";
+  src: url("/fonts/NazrulPixelUnicode-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block; /* the engine rasterises at boot: never swap mid-flight */
+}
+
 html,
 body {
   margin: 0;

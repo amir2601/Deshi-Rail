@@ -1,11 +1,11 @@
-// Generates src/engine/engine.js from the original 13 ordered classic scripts
-// in legacy/js (01-config … 13-main).
+// Generates src/engine/engine.js from the 13 ordered classic scripts in
+// legacy/js (01-config … 13-main).
 //
-// The original game was a set of classic <script> files that shared a single
-// global scope. A bundler wants ES modules, so we concatenate the files, in the
-// same order, into the body of a `createEngine()` factory. Concatenation keeps
-// the shared scope exactly as it was, so the simulation, drawing and audio code
-// is byte-for-byte unchanged.
+// The engine is authored as classic <script> files that share a single global
+// scope. A bundler wants ES modules, so we concatenate the files, in the same
+// order, into the body of a `createEngine()` factory. Concatenation keeps the
+// shared scope exactly as it was, so the simulation, drawing and audio code is
+// byte-for-byte unchanged.
 //
 // Only the DOM-facing boot code changed:
 //   * module 12 no longer reads #screen or mutates the toolbar buttons itself —
@@ -190,7 +190,7 @@ const HEADER = `/* eslint-disable */
 // Do not edit by hand: edit the sources in legacy/js and re-run
 //   node scripts/build-engine.mjs
 //
-// The original game was 13 ordered classic scripts that shared one global
+// The engine is authored as 13 ordered classic scripts that share one global
 // scope. Here the same code, in the same order, lives inside the body of the
 // createEngine() factory below, so the engine is one ES module the React app
 // imports. Only the DOM boot, toolbar wiring and responsive layout changed —
@@ -204,7 +204,7 @@ export function createEngine(canvasEl, options = {}) {
 //   options.trains   the services on that line     (see TRAINS in 01-config)
 //   options.bnName   the Bangla route name on the title card (see LINE_INFO)
 // Anything omitted falls back to the built-in Dhaka - Khulna line below, so the
-// original static site and the option-less tests behave exactly as before.
+// option-less tests and the built-in line behave the same either way.
 `;
 
 const FOOTER = `

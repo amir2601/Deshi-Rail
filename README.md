@@ -4,6 +4,8 @@
 
 ### A pixel-art train journey across Bangladesh
 
+**▶ Play the live build: [deshi-rail.vercel.app](https://deshi-rail.vercel.app)**
+
 Board at Kamalapur and watch the country roll past: paddy fields and village
 ponds, the Jamuna on its long bridge, the white kash-phool chars, and the
 south-west opening out on the run down to Khulna. Every pixel of it is drawn
@@ -18,7 +20,6 @@ network.
 [![Vite 8](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)](https://vite.dev)
 [![no runtime deps](https://img.shields.io/badge/runtime_deps-none-2e7d3e)](#quick-start)
 [![headless tested](https://img.shields.io/badge/tests-headless-4f9a3c)](#testing)
-[![fan-made tribute](https://img.shields.io/badge/fan--made_tribute-e8875a)](#credits)
 
 </div>
 
@@ -33,12 +34,10 @@ boats on the river, a rickshaw at the level crossing, a station crowd waiting to
 board — and the light slides from noon into a dusk of lit windows and headlight
 glow.
 
-Underneath, it is a faithful reproduction of pixel-train-journey, rebuilt as an
-idiomatic **React + Vite** app and re-fitted with the **real** routes, stations
-and services of Bangladesh Railway. The simulation, drawing and audio code is
-the original engine, carried over almost unchanged; what was adapted is the
-route data, the stop and timetable logic, the multi-line plumbing, and the
-code that faces the DOM — which React now owns.
+It is built as an idiomatic **React + Vite** app around a procedural pixel
+engine written from scratch, carrying the **real** routes, stations and services
+of Bangladesh Railway. The simulation, terrain, drawing and audio are all
+generated in code — nothing is loaded from disk — and React owns the DOM.
 
 > **Deshi Rail** — *deshi* (**দেশি**) means "of the country, homegrown", and this
 > is named for the ride it recreates: the everyday trains that tie Bangladesh
@@ -244,12 +243,13 @@ Debug overlay: `D`.
 
 ## How it works
 
-The original game was 13 ordered classic `<script>` files (`js/01-config.js` …
-`js/13-main.js`) sharing a single global scope. A bundler wants ES modules, so
-`scripts/build-engine.mjs` concatenates those files, **in the same order**, into
-the body of a `createEngine()` factory. Concatenation preserves the shared scope
-exactly, so the simulation, terrain, train, weather and audio code is unchanged —
-only the DOM-facing parts were adapted:
+The engine lives as 13 ordered classic `<script>` files (`legacy/js/01-config.js`
+… `legacy/js/13-main.js`) that share a single global scope and run with no build
+step at all. A bundler wants ES modules, so `scripts/build-engine.mjs`
+concatenates those files, **in the same order**, into the body of a
+`createEngine()` factory. Concatenation preserves the shared scope exactly, so
+the simulation, terrain, train, weather and audio code carries over unchanged —
+only the DOM-facing parts differ:
 
 - **Module 12** no longer reads `#screen` or mutates the toolbar buttons itself.
   It exposes the live state objects (`sim`, `drive`, `ui`, `audio`, …), the
@@ -268,11 +268,11 @@ only the DOM-facing parts were adapted:
 - `Toolbar` reads the live state directly and renders the AUTO/DRIVE button sets;
 - `RoutePicker` lists the built-in line plus everything in `src/lines.js` and, on
   a change, re-creates the engine on the chosen line;
-- `useFitLayout` reproduces the original responsive sizing — toolbar under the
+- `useFitLayout` owns the responsive sizing — toolbar under the
   picture in portrait, beside it on wide screens, or floating over the bottom of
   the picture when there is no room.
 
-Keyboard shortcuts are still handled by the engine (as named listeners), so they
+Keyboard shortcuts are handled by the engine (as named listeners), so they
 work regardless of focus. After editing anything in `legacy/js`, regenerate the
 engine:
 
@@ -308,7 +308,7 @@ scripts/
   dev-check.mjs         boots the dev server and loads the entry modules
   preview-check.mjs     serves dist/ and checks the bundle
 docs/                   the screenshots used above
-legacy/                 the original static site the engine is built from
+legacy/                 a standalone no-build copy of the engine's 13 scripts
 ```
 
 ## Testing
@@ -365,16 +365,18 @@ a machine with no image viewer.
 
 ## legacy/
 
-The original no-build, dependency-free static site — the 13 classic scripts,
-`css/styles.css`, `index.html` and `serve.mjs` — is preserved under `legacy/` for
-reference and still runs on its own. `src/engine/engine.js` is generated from
-`legacy/js` by `npm run build:engine`; never edit the generated file by hand.
+A no-build, dependency-free copy of the engine — the 13 classic scripts,
+`css/styles.css`, `index.html` and `serve.mjs` — lives under `legacy/` and runs
+on its own with no bundler. `src/engine/engine.js` is generated from `legacy/js`
+by `npm run build:engine`; never edit the generated file by hand.
 
-## Credits
+## Credits & disclaimer
 
-Built as a **fan-made tribute** to Bangladeshi railways and to the original
-[pixel-train-journey](https://pixel-train-journey.vercel.app/) by its author. It
-is not affiliated with, endorsed by, or connected to **Bangladesh Railway**; the
+Bangla text is set in **নজরুল পিক্সেল** (Nazrul Pixel), a Bengali pixel font used
+here for a personal project under its own EULA — see
+`public/fonts/NAZRUL-PIXEL-LICENSE.txt` for the terms and attribution.
+
+Not affiliated with, endorsed by, or connected to **Bangladesh Railway**; the
 route, station, service and timetable data is public information, reproduced here
 for the pleasure of the ride.
 

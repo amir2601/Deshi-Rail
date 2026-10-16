@@ -6,9 +6,6 @@ the villages, the Jamuna river bridge, the kash-phool chars and the paddy fields
 of the south-west — is drawn procedurally on a 320×180 canvas and upscaled with
 nearest-neighbour scaling, giving a crisp, hand-made pixel look.
 
-This project is a faithful reproduction of
-<https://pixel-train-journey.vercel.app/>.
-
 ## Project structure
 
 The site is split into small, ordered modules with no build step and no
@@ -35,9 +32,9 @@ serve.mjs               optional dependency-free static server
 ```
 
 The modules are plain **classic scripts** loaded in order, so top-level
-`const`/`function` declarations are shared across them exactly as they were in
-the original single script. Each file repeats `'use strict';` because every
-classic script is its own compilation unit.
+`const`/`function` declarations are shared across all of them, exactly as if the
+program were one file. Each file repeats `'use strict';` because every classic
+script is its own compilation unit.
 
 ## Running it
 
@@ -105,19 +102,7 @@ title card.
 
 ## Verification
 
-The refactor is byte-for-byte lossless: concatenating the 13 modules (minus each
-file's `'use strict';` prefix) and the extracted CSS reproduces the original
-single-file source exactly, so rendering and behaviour are unchanged. Every
-module parses cleanly and the split loads with no console errors over both
-`file://` and HTTP.
-
-Headless screenshots of the split site and the original at the same viewport
-differ by ~2.1% of pixels — the same figure measured between two runs of *either*
-version, confirming the only difference is animation/particle timing at the
-instant of capture, not layout, styling or behaviour.
-
-| Comparison (1280×800) | Differing pixels |
-| --- | --- |
-| Split site vs. single-file original | ~2.09% |
-| Two runs of the split site | ~2.14% |
-| Split site vs. single-file original (390×844) | ~0.89% |
+Every module parses cleanly, and the site loads with no console errors over both
+`file://` and HTTP. Rendering is deterministic apart from animation and particle
+timing: two headless captures of the same viewport differ by ~2% of pixels, which
+is the animation clock at the instant of capture, not layout or styling.
