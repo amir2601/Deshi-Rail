@@ -364,7 +364,7 @@ function hexToRgb(hex) {
   return [n >> 16, (n >> 8) & 255, n & 255];
 }
 
-// 3x5 bitmap font (rows top to bottom) for the debug overlay and signs
+// 3x5 bitmap font (rows top to bottom) for platform signs and HUD labels
 const FONT = {
   ' ': '000 000 000 000 000', '.': '000 000 000 000 010', ':': '000 010 000 010 000',
   '-': '000 000 111 000 000', '/': '001 001 010 100 100', '>': '100 010 001 010 100',
@@ -4209,10 +4209,10 @@ function villageHorn(dt) {                             // (a driver blows their 
 // 9. UI, SOUND AND INPUT
 // =====================================================================
 const canvas = canvasEl;
-const ui = { bannerY: -40, bannerSt: 1, bannerHold: 0, complete: false, panelY: -150, hover: false, debugW: 0,
+const ui = { bannerY: -40, bannerSt: 1, bannerHold: 0, complete: false, panelY: -150, hover: false,
              paused: false, speed: 1, timeMode: 0, rainMode: 0,      // toolbar state
              title: true, titleSel: 1, train: 0 };                    // title card: 0 WATCH, 1 DRIVE
-const input = { debug: false, fast: false };
+const input = { fast: false };
 
 // The station the banner announces: the first one ahead that is either booked
 // (sim.calls) or a major station. It is asked by distance — sim.station only
@@ -4268,7 +4268,7 @@ function bannerSprite(i) {
 function drawBanner(g) {
   const b = bannerSprite(ui.bannerSt), y = Math.round(ui.bannerY);
   if (y <= -b.height) return;
-  g.drawImage(b, Math.max(input.debug ? ui.debugW + 4 : 2, (W - b.width) >> 1), y);
+  g.drawImage(b, Math.max(2, (W - b.width) >> 1), y);
 }
 
 // "Journey complete" panel with a restart button (normal + hover sprites).
@@ -4529,37 +4529,6 @@ function drawPaused(g) {
   const s = 'PAUSED', w = s.length * 8 + 8, x = (W - w) >> 1;
   hudBox(g, x, 84, w, 16);
   drawText2x(g, s, x + 5, 87, PALETTE.white);
-}
-
-function landLabel() {
-  const w = terrainAt(sim.dist);
-  return SECTIONS[TERRAIN[w.t > 0.5 ? w.b : w.a].id].name;
-}
-
-function drawDebug(g) {
-  const stopped = sim.state === 'STOPPED';
-  const nextI = sim.station < LAST_STATION ? nextCallIdx(sim.station) : LAST_STATION;
-  const st = STATIONS[stopped ? sim.station : nextI];
-  const lines = [
-    'STATE ' + sim.state + (stopped ? ' ' + sim.stopPhase.replace('_', ' ') : ''),
-    'SPEED ' + sim.speed.toFixed(1) + ' PX/S',
-    'DIST  ' + Math.floor(sim.dist) + ' PX',
-    (stopped ? 'AT    ' : 'NEXT  ') + st.en,
-    stopped ? 'PEOPLE ' + sim.people.length : 'IN    ' + Math.ceil(sim.nextStop - sim.dist) + ' PX',
-    'TIME  ' + hhmm(sim.hour) + ' ' + TIME_MODES[ui.timeMode][0] + (weather.level > 0.05 ? ' RAIN ' + Math.round(weather.level * 100) : ''),
-    'LAND  ' + landLabel() + (sim.onBridge ? ' BRIDGE' : ''),
-  ];
-  if (drive.on) lines.push('DRIVE ' + drive.engine + (drive.reverser === -1 ? ' [REV]' : '') + ' ' + leverLabel(drive.lever) + ' RPM ' + Math.round(drive.rpm * 100) +
-                           ' A ' + drive.accel.toFixed(1), 'TRIP ' + Math.round(drive.tripT) + ' S  OFFSET ' + Math.round(sim.dist - STATIONS[sim.station < LAST_STATION ? nextI : sim.station].dist));
-  if (timeScale() !== 1) lines.push(ui.paused ? 'PAUSED' : 'SPEED X' + timeScale());
-  if (quality.low) lines.push('LOW QUALITY ' + quality.ema.toFixed(1) + ' MS');
-  lines.push('P PAUSE  N NEXT  T TIME  W RAIN  C DRIVE', 'M SOUND  1/2/4 SPEED  R REV/RESTART');
-  const w = Math.max(...lines.map(textWidth)) + 6, h = lines.length * 7 + 4;
-  rect(g, 2, 2, w, h, PALETTE.slate);
-  rect(g, 3, 3, w - 2, h - 2, PALETTE.ink);
-  lines.forEach((s, i) =>
-    drawText(g, s, 5, 5 + i * 7, i >= lines.length - 2 ? PALETTE.grayLight : i === 0 ? PALETTE.glow : PALETTE.white));
-  ui.debugW = w + 2;
 }
 
 // --- sound: everything synthesised with Web Audio, no files -----------------
@@ -4955,15 +4924,25 @@ function driveKey(key) {
   return true;
 }
 
+// The engine listens on window, so keys typed into a form field (the login
+// card) bubble up here too. While a field has focus the keyboard belongs to
+// it: typing a name must not trip a game shortcut (e.g. the D in "Riad").
+function typingInField(e) {
+  const t = e.target;
+  if (!t || !t.tagName) return !!(t && t.isContentEditable);
+  return t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' ||
+         t.tagName === 'SELECT' || t.isContentEditable;
+}
+
 function onKeyDown(e) {
+  if (typingInField(e)) return;
   unlockAudio();
   const key = e.code;
   if (key === 'KeyF') input.fast = true;
   if (key === 'KeyH' && drive.on && !ui.title && !ui.paused) hornOn();
   if (e.repeat) { if (key === 'Space' || key.startsWith('Arrow')) e.preventDefault(); return; }
   if ((ui.title && titleKey(key)) || (drive.on && !ui.title && driveKey(key))) { e.preventDefault(); syncButtons(); return; }
-  if (key === 'KeyD') input.debug = !input.debug;
-  else if (key === 'KeyC') actions.mode();
+  if (key === 'KeyC') actions.mode();
   else if (key === 'KeyT') actions.time();
   else if (key === 'KeyM') setMuted(!audio.muted);
   else if (key === 'KeyW') actions.rain();
@@ -4974,6 +4953,7 @@ function onKeyDown(e) {
   syncButtons();
 }
 function onKeyUp(e) {
+  if (typingInField(e)) return;
   if (e.code === 'KeyF') input.fast = false;
   if (e.code === 'KeyH') hornOff();
 }
@@ -5078,11 +5058,9 @@ function render() {
   drawGlow(ctx);                                                         // 8. lamps, windows, sparks
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   const driving = drive.on && !ui.title;
-  ui.debugW = 0;
   if (driving) drawPopups(ctx);
   drawMap(ctx);
   if (driving) { drawDriveHUD(ctx); drawHint(ctx); }
-  if (input.debug) drawDebug(ctx);
   drawBanner(ctx);
   if (driving) drawToasts(ctx);
   drawPanel(ctx);

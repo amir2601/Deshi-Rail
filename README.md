@@ -228,8 +228,6 @@ The toolbar holds every control; each also has a keyboard shortcut:
 | TAP | `M` | Mute / unmute sound |
 | — | `F` | Hold to fast-forward |
 
-Debug overlay: `D`.
-
 ## Features
 
 - **A fixed 320×180 pixel canvas**, upscaled with nearest-neighbour scaling on a

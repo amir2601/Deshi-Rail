@@ -11,7 +11,7 @@
     "build:engine": "node scripts/build-engine.mjs",
     "screenshot": "node scripts/screenshot.mjs --scene tea --time day --out docs/hero.png",
     "screenshots": "node scripts/screenshot.mjs --scene tea --out docs/hero.png && node scripts/screenshot.mjs --scene hills --out docs/hills.png && node scripts/screenshot.mjs --scene kash --out docs/kash.png",
-    "test": "node scripts/smoke-test.mjs && node scripts/route-test.mjs && node scripts/lines-test.mjs && node scripts/save-test.mjs && node scripts/react-ssr-test.mjs",
+    "test": "node scripts/smoke-test.mjs && node scripts/route-test.mjs && node scripts/lines-test.mjs && node scripts/save-test.mjs && node scripts/input-test.mjs && node scripts/react-ssr-test.mjs",
     "check": "npm test && node scripts/dev-check.mjs"
   },
   "dependencies": {
