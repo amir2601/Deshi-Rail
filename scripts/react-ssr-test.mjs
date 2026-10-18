@@ -57,6 +57,9 @@ try {
   // 3. App's initial render (engine not mounted yet) is clean.
   const appHtml = renderToStaticMarkup(React.createElement(AppModule.default));
   assert.ok(appHtml.includes('<canvas') && appHtml.includes('id="screen"'), 'canvas rendered');
+  assert.ok(appHtml.includes('class="topbar"'), 'top bars share one wrapping strip');
+  assert.ok(appHtml.slice(appHtml.indexOf('class="topbar"')).includes('class="userbar"'),
+    'the account chip sits inside the top strip');
 
   // 4. The route picker lists the built-in line and the extra lines.
   const { RoutePicker } = await server.ssrLoadModule('/src/components/RoutePicker.jsx');

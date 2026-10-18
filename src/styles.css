@@ -136,13 +136,32 @@ canvas {
   pointer-events: none; /* taps always land on the button itself */
 }
 
-/* Route picker — layered over the title card, top-right, out of the flex flow
-   so showing/hiding it never shifts the picture or toolbar. */
-.routebar {
+/* The account chip and the route picker share one fixed strip across the top:
+   the chip sits left, the picker right, and on a narrow screen (or when the
+   chip is wide) the picker wraps onto a second row instead of overlapping. */
+.topbar {
   position: fixed;
-  top: calc(8px + env(safe-area-inset-top));
-  right: calc(8px + env(safe-area-inset-right));
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px;
+  padding: calc(8px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) 0
+    calc(8px + env(safe-area-inset-left));
+  pointer-events: none; /* only the bars themselves take taps, not the strip */
+}
+
+.topbar > * {
+  pointer-events: auto;
+  max-width: 100%;
+}
+
+/* Route picker — shown over the title card, inside the top strip. */
+.routebar {
+  margin-left: auto; /* to the right when it shares a row, still right when it wraps */
   display: flex;
   align-items: center;
   gap: 6px;
@@ -152,7 +171,6 @@ canvas {
   font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
   letter-spacing: 0.5px;
   color: #f4f4ec;
-  max-width: calc(100vw - 24px);
 }
 
 .routebar-label {
@@ -178,10 +196,6 @@ canvas {
 /* Account chip — top-left, mirroring the route picker's look; the saved
    journey lives in this browser, keyed by the name typed here. */
 .userbar {
-  position: fixed;
-  top: calc(8px + env(safe-area-inset-top));
-  left: calc(8px + env(safe-area-inset-left));
-  z-index: 10;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -191,7 +205,6 @@ canvas {
   font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
   letter-spacing: 0.5px;
   color: #f4f4ec;
-  max-width: calc(100vw - 24px);
   flex-wrap: wrap;
 }
 

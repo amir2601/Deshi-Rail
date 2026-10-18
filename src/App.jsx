@@ -181,19 +181,21 @@ export default function App() {
     <div ref={appRef} className={`app ${layout.mode}`}>
       <canvas id="screen" ref={canvasRef} width={320} height={180} />
       <Toolbar engine={engine} driving={driving} />
-      {engine && engine.ui.title && (
-        <RoutePicker routes={routes} value={lineId} onChange={setLineId} />
-      )}
-      <UserBar
-        user={user}
-        status={status}
-        onLogin={() => setShowLogin(true)}
-        onLogout={handleLogout}
-        onSave={handleSaveProgress}
-        onLoad={handleLoadProgress}
-        onClear={handleClearProgress}
-        hasProgress={hasProgress}
-      />
+      <div className="topbar">
+        <UserBar
+          user={user}
+          status={status}
+          onLogin={() => setShowLogin(true)}
+          onLogout={handleLogout}
+          onSave={handleSaveProgress}
+          onLoad={handleLoadProgress}
+          onClear={handleClearProgress}
+          hasProgress={hasProgress}
+        />
+        {engine && engine.ui.title && (
+          <RoutePicker routes={routes} value={lineId} onChange={setLineId} />
+        )}
+      </div>
       {showLogin && <LoginModal onLogin={handleLogin} onSkip={handleSkip} />}
     </div>
   );
