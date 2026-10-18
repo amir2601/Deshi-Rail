@@ -136,9 +136,11 @@ canvas {
   pointer-events: none; /* taps always land on the button itself */
 }
 
-/* The account chip and the route picker share one fixed strip across the top:
-   the chip sits left, the picker right, and on a narrow screen (or when the
-   chip is wide) the picker wraps onto a second row instead of overlapping. */
+/* The account chip and the route picker share one fixed strip across the top.
+   On a wide screen they sit at opposite ends (chip left, picker right); when the
+   chip is too wide to share the row, the picker wraps to a second line and
+   space-between drops it back to the left, tucked under the chip, so the two
+   never overlap and the stack still reads as a tidy two-row header. */
 .topbar {
   position: fixed;
   top: 0;
@@ -147,11 +149,15 @@ canvas {
   z-index: 10;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   align-items: flex-start;
   gap: 6px;
   padding: calc(8px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) 0
     calc(8px + env(safe-area-inset-left));
   pointer-events: none; /* only the bars themselves take taps, not the strip */
+  /* keep phone browsers from inflating the bar text ("font boosting") */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .topbar > * {
@@ -159,10 +165,10 @@ canvas {
   max-width: 100%;
 }
 
-/* Route picker — shown over the title card, inside the top strip. */
+/* Route picker — shown over the title card, inside the top strip. inline-flex
+   so it stays content-sized even if it ever lands outside the flex strip. */
 .routebar {
-  margin-left: auto; /* to the right when it shares a row, still right when it wraps */
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 4px 6px;
@@ -196,7 +202,7 @@ canvas {
 /* Account chip — top-left, mirroring the route picker's look; the saved
    journey lives in this browser, keyed by the name typed here. */
 .userbar {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 4px 6px;
