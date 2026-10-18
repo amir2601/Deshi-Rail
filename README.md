@@ -72,6 +72,24 @@ top-right corner, cycle through that line's services with `↑`/`↓`, then choo
 **WATCH** for a cinematic ride or **DRIVE** to take the controls. (`#watch` and
 `#drive` in the URL skip straight to the trip.)
 
+## Accounts and saved journeys
+
+The game opens with a small **LOGIN** card in the corner of the title screen.
+Type any name (there is no password — the name is just a label for a save slot
+stored in this browser) or press **SKIP** to ride without one.
+
+Once you are logged in, the chip in the top-left keeps your place:
+
+- **SAVE** — writes the current journey (line, service, position, driver's
+  controls and score) under your name.
+- **CONTINUE** — picks that journey back up exactly where it stopped, switching
+  back to its line and service first if you had wandered off.
+- **CLEAR** — forgets the saved journey.
+
+The journey also autosaves every twenty seconds while you are mid-trip, and once
+more when the tab is hidden or closed, so **CONTINUE** usually lands right where
+you left off. Saves live in `localStorage`; nothing leaves the device.
+
 ## Lines
 
 The route baked into the engine is the real **Dhaka (Kamalapur) → Khulna** line,

@@ -174,3 +174,156 @@ canvas {
   outline: 2px solid #ffd65c;
   outline-offset: 1px;
 }
+
+/* Account chip — top-left, mirroring the route picker's look; the saved
+   journey lives in this browser, keyed by the name typed here. */
+.userbar {
+  position: fixed;
+  top: calc(8px + env(safe-area-inset-top));
+  left: calc(8px + env(safe-area-inset-left));
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background: #1b1f3b;
+  border: 2px solid #4a4f84;
+  font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+  color: #f4f4ec;
+  max-width: calc(100vw - 24px);
+  flex-wrap: wrap;
+}
+
+.userbar-name {
+  color: #ffd65c;
+}
+
+.userbar-btn {
+  padding: 3px 4px;
+  background: #12152c;
+  color: #f4f4ec;
+  border: 2px solid #4a4f84;
+  border-radius: 0;
+  font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.userbar-btn:hover:not(:disabled) {
+  border-color: #6aaee0;
+}
+
+.userbar-btn:active:not(:disabled) {
+  background: #2c2f5e;
+}
+
+.userbar-btn:focus-visible {
+  outline: 2px solid #ffd65c;
+  outline-offset: 1px;
+}
+
+.userbar-btn:disabled {
+  color: #6b7098;
+  border-color: #2c2f5e;
+  cursor: default;
+}
+
+.userbar-status {
+  color: #8f96c8;
+}
+
+/* Login card — same frame language as the title card chrome. */
+.login-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 6, 16, 0.82);
+  padding: 16px;
+}
+
+.login-card {
+  box-sizing: border-box;
+  width: min(320px, 100%);
+  padding: 14px;
+  background: #1b1f3b;
+  border: 2px solid #4a4f84;
+  color: #f4f4ec;
+  font: bold 9px/1.6 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-title {
+  margin: 0;
+  font: bold 15px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 2px;
+  color: #ffd65c;
+}
+
+.login-note {
+  margin: 0;
+  font-size: 9px;
+  font-weight: normal;
+  color: #8f96c8;
+  line-height: 1.6;
+}
+
+.login-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7px;
+  background: #12152c;
+  color: #f4f4ec;
+  border: 2px solid #4a4f84;
+  border-radius: 0;
+  font: bold 10px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+}
+
+.login-input:focus-visible {
+  outline: 2px solid #ffd65c;
+  outline-offset: 1px;
+}
+
+.login-error {
+  color: #ff6b6b;
+  font-size: 9px;
+}
+
+.login-row {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.login-go,
+.login-skip {
+  flex: 1;
+  padding: 8px;
+  background: #12152c;
+  color: #f4f4ec;
+  border: 2px solid #4a4f84;
+  border-radius: 0;
+  font: bold 9px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.login-go:hover,
+.login-skip:hover {
+  border-color: #6aaee0;
+}
+
+.login-go:focus-visible,
+.login-skip:focus-visible {
+  outline: 2px solid #ffd65c;
+  outline-offset: 1px;
+}

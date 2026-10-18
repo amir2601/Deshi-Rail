@@ -5185,6 +5185,82 @@ return {
   unlockAudio, setMuted, hornOn, hornOff,
   subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn); },
   getRevision() { return revision; },
+  // --- save / resume -----------------------------------------------------
+  // A JSON-safe snapshot of the journey: position, timetable, service and
+  // toolbar state. Transient objects (the crowd, the seeded RNGs, particle
+  // pools) are left out on purpose - they are re-created on restore.
+  exportProgress() {
+    const nextStop =
+      sim.station < LAST_STATION ? STATIONS[nextCallIdx(sim.station)].dist : Infinity;
+    return {
+      v: 1,
+      lineId: OPT.id || LINE_INFO.id,
+      sim: {
+        state: sim.state, stopPhase: sim.stopPhase, phaseT: sim.phaseT, timer: sim.timer,
+        speed: sim.speed, dist: sim.dist, segStart: sim.segStart, segSpeed: sim.segSpeed,
+        segDur: sim.segDur, station: sim.station, stopOffset: sim.stopOffset,
+        nextStop, doorOpen: sim.doorOpen, hour: sim.hour, night: sim.night,
+        onBridge: sim.onBridge, bridgeMix: sim.bridgeMix, shake: sim.shake,
+        missedStations: sim.missedStations ? Array.from(sim.missedStations) : [],
+      },
+      drive: {
+        on: drive.on, engine: drive.engine, engineT: drive.engineT, rpm: drive.rpm,
+        lever: drive.lever, reverser: drive.reverser, headlight: drive.headlight,
+        tripT: drive.tripT, pts: { ...drive.pts }, comfort: drive.comfort, pax: drive.pax,
+        final: drive.final ? { ...drive.final } : null,
+      },
+      ui: {
+        title: ui.title, titleSel: ui.titleSel, train: ui.train, complete: ui.complete,
+        paused: ui.paused, speed: ui.speed, timeMode: ui.timeMode, rainMode: ui.rainMode,
+      },
+      weather: { level: weather.level, target: weather.target },
+    };
+  },
+  // Restore a snapshot previously taken by exportProgress(). Returns false if
+  // the payload is unusable; on success the sim carries on from that point.
+  importProgress(p) {
+    if (!p || !p.sim || typeof p.sim.dist !== 'number' || p.v !== 1) return false;
+    try {
+      const s = p.sim;
+      // The service decides the booked stops and the timetable, so seat it
+      // first; then lay the journey state over the top.
+      if (p.ui && typeof p.ui.train === 'number') applyTrain(p.ui.train);
+      const nextStop =
+        typeof s.nextStop === 'number' && isFinite(s.nextStop)
+          ? s.nextStop
+          : s.station < LAST_STATION
+            ? STATIONS[nextCallIdx(Math.max(0, Math.min(LAST_STATION, s.station)))].dist
+            : Infinity;
+      // Drop the crowd the fresh engine was carrying; it is rebuilt as the
+      // train nears each platform again.
+      for (const q of sim.people) forgetPerson(q);
+      Object.assign(sim, {
+        state: s.state, stopPhase: s.stopPhase, phaseT: s.phaseT || 0, timer: s.timer || 0,
+        speed: s.speed || 0, dist: s.dist, segStart: s.segStart || s.dist,
+        segSpeed: s.segSpeed || 0, segDur: s.segDur || 0, station: s.station || 0,
+        stopOffset: s.stopOffset || 0, nextStop, doorOpen: s.doorOpen || 0,
+        hour: typeof s.hour === 'number' ? s.hour : sim.hour,
+        night: typeof s.night === 'number' ? s.night : sim.night,
+        onBridge: !!s.onBridge, bridgeMix: s.bridgeMix || 0, shake: 0,
+        missedStations: new Set(s.missedStations || []),
+        people: [], populated: new Set(),
+      });
+      if (p.drive) Object.assign(drive, p.drive, { horn: false, accel: 0 });
+      if (p.ui) Object.assign(ui, p.ui);
+      if (p.weather) { weather.level = p.weather.level || 0; weather.target = p.weather.target || 0; }
+      // Resuming while stopped: replay the stop from the beginning so the
+      // rebuilt platform crowd boards properly (and no one is "left behind").
+      if (sim.state === 'STOPPED' && !ui.complete) {
+        sim.stopPhase = 'SETTLE';
+        sim.phaseT = 0;
+        sim.doorOpen = 0;
+      }
+      syncButtons();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
   dispose,
 };
 }
